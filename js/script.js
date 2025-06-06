@@ -64,13 +64,38 @@ document.getElementById("frmAgregar").addEventListener("submit", async e => {
 
     //Capturar los valores del formulario
     const nombre = document.getElementById("txtNombre").value.trim();
-    const apellido = document.getElementById("txtApellido").value.trim();
+    const apellido = document.getElementById("txtApelldio").value.trim();
     const correo = document.getElementById("txtEmail").value.trim();
 
     //Validacion basica
     if(!nombre || !apellido || !correo)
         {
             alert("Ingresar los valores correctamente");
-            return;
+            return; //Para evitar que el codigo se siga ejecutando
     }
+
+    //Llamar a la API para enviar el registro
+    const respuesta = await fetch(API_URL, {
+        method: "POST", //Tipo de solicitud
+        headers: {'Content-Type':'application/json'}, //Tipo de dato enviado
+        body: JSON.stringify({nombre, apellido, correo})   //Datos enviado
+    });
+
+
+    //Verificar si la API responde que los datos fueron enviados correctamente
+    if(respuesta.ok)
+        {
+            alert("El registro fue agregado correctamente");
+
+            //limpiar el formulario
+            document.getElementById("frmAgregar").reset();
+
+            //Cerrar el modal(dialog)
+            modal.close();
+
+            //Recargamos la tabla
+            ObtenerIntegrantes();
+    }
+
+
 });
