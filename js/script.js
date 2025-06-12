@@ -139,6 +139,39 @@ function AbrirModalEditar(id, nombre, apellido, correo){
     modalEditar.showModal();    
 }
 
+//Cuando se trabaja en formularios se trabaja con el
+document.getElementById("frmEditar").addEventListener("submit", async e => {
+    e.preventDefault(); //Evita que el formulario se envie
+    
+    //Capturamos los valores de los input
+    const id = document.getElementById("txtIdEditar").value;
+    const nombre = document.getElementById("txtNombreEditar").value.trim();
+    const apellido = document.getElementById("txtApelldioEditar").value.trim();
+    const correo = document.getElementById("txtEmailEditar").value.trim();
+
+    //Validar todas las constantes 
+    if(!id || !nombre || !apellido || !correo){
+        alert("Completa todo los campos");
+        return; //Evita que el codigo se siga ejecuntando 
+    }
+
+    //Llamada a la API
+    const respuesta = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ correo, nombre, apellido})
+    });
+
+    if(respuesta.ok){
+        alert("El registro fue actualizado con exito"); //Confirmacion
+        modalEditar.close(); //Cerrar el modal
+        ObtenerIntegrantes(); //Actualizamos la lista para ver los cambios
+    }
+    else{
+        alert("El registro no pudo ser actualizado")
+    }
+});
+
 
 
 
